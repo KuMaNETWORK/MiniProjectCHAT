@@ -14,7 +14,7 @@ nickname = input("Name: ")
 
 # Connecting To Server
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client.connect(('10.60.111.80', 12345))                            #Instead of connecting, we'r binding to the host's port(Port Number is Confidential)
+client.connect(('192.168.255.1', 12345))                            #Instead of connecting, we'r binding to the host's port(Port Number is Confidential)
 
 # Listening to Server and Sending Nickname
 def receive():

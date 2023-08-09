@@ -14,7 +14,7 @@ import threading
 
 # Connection Data  
 #Port is confidential thing
-host = '10.60.111.80'                                                 #IP of your host
+host = '192.168.255.1'                                                 #IP of your host
 port = 12345                                                       #Dont take reserved ports
 
 # Starting Server
