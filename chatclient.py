@@ -1,28 +1,18 @@
 from socket import *
 
-HOST = '10.60.131.140'
+HOST = '10.60.131.140'  # เปลี่ยนเป็น IP ของเครื่อง server ที่เชื่อมต่อกับ
 PORT = 5000
-BUFFER_SIZE = 4096
-ADDRESS = (HOST, PORT)
 
-server = socket(AF_INET, SOCK_STREAM)
-server.connect(ADDRESS)
-messageFromServer = bytes.decode(server.recv(BUFFER_SIZE))
-print(messageFromServer)
-name = input('Enter your name: ')
-userName = str.encode(name)
-server.send(userName)
+client = socket(AF_INET, SOCK_STREAM)
+client.connect((HOST, PORT))
+
+name = input("Enter your name: ")
+client.send(str.encode(name))
 
 while True:
-    receiveMessage = bytes.decode(server.recv(BUFFER_SIZE))
-    if not receiveMessage:
-        print('Server disconnected')
+    message = input("Enter your message: ")
+    if message.lower() == "quit":
+        client.send(str.encode(message))
+        print("Goodbye!")
         break
-    print(receiveMessage)
-    sendMessage = input('Enter your message: ')
-    if not sendMessage:
-        print('Server disconnected')
-        break
-    server.send(str.encode(sendMessage))
-
-server.close()
+    client.send(str.encode(message))
