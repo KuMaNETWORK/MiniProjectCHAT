@@ -1,18 +1,15 @@
-#importing stuffs -- sockets and threads
-#connecting to the server
-#listening the broadcast and sending your name to the server to join
-#receiving messages form server
-#sending messages to the server
-#Finally to work with everything -- we'r starting the threads to read and write 
-
-
 import socket
 import threading
 
 from time import ctime
+
+COLOR_RESET = '\033[0m'
+COLOR_BLUE = '\033[91m'  # Blue color
+COLOR_GREEN = '\033[92m'  # Green color
+
 HOST = '192.168.255.1'
 PORT = '12345'
-nickname = input("Name: ")
+nickname = input("User Name: ")
 
 
 # Connecting To Server
@@ -24,19 +21,15 @@ client.connect(('192.168.255.1', 12345))                            #Instead of 
 def receive():
     while True:
         try:
-            # Receive Message From Server
 
             message = client.recv(1024).decode('ascii')  
 
-            #cheching the message which is decoded to NICK and if yes were moving up!
             if message == 'NICK':                           
                 client.send(nickname.encode('ascii'))    
             else:
-                print(message)
+                print(COLOR_GREEN + message + COLOR_RESET)
         except:
-            # Close Connection When Error
-            print(ctime() + ' '+ nickname +' ' + "Disconnect!")
-
+            print(ctime() + ' ' + COLOR_BLUE + nickname + ' Disconnect!' + COLOR_RESET)
             client.close()
             break
 
