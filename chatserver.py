@@ -42,7 +42,7 @@ class clientHandler(Thread):
                 self.broadCastingMesage(self.client, message)
                 threadLock.release()
 
-HOST = 'localhost'
+HOST = '10.60.131.140'
 PORT = 5000
 BUFFER_SIZE = 4096
 ADDRESS = (HOST, PORT) 
