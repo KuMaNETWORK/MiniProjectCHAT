@@ -1,16 +1,7 @@
-#we need a server sys and a client sys 
-
-#import required stuffs which wil be sockets and threadinng
-#connection
-#starting the server
-#adding lists -- which is client (leaving that empty so that they can add their name after joining) --- mr.robot style  ;)
-#methods required for the chat  -- Ill combine all methods with a main method
-##definig main receive functions -- Broadcast, handler, receiving and listining function
 
 
 import socket
 import threading
-
 
 # Connection Data  
 #Port is confidential thing
@@ -22,6 +13,9 @@ server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)         #Internet soc
 server.bind((host, port))                                          #Server is binded to local host and a port  
 server.listen()                                                    #Server is set to listining mode
 
+
+from time import ctime
+
 # Lists For Clients and Their Nicknames
 clients = [] 
 nicknames = []
@@ -32,32 +26,41 @@ def broadcast(message):
         client.send(message)                                        #Getting all the clients and sending msg that new one joined to the admin
 
 # Handling Messages From Clients
+# ...
+
 def handle(client):
-    while True:
-        try:
+    try:
+        # ... (previous code)
+        while True:
             # Broadcasting Messages
-            message = client.recv(1024)                      
-            broadcast(message)                                      #After receiving we are broadcasting to other
-        except:
-            # Removing And Closing Clients
-            index = clients.index(client)        
-            clients.remove(client)       
-            client.close()
-            nickname = nicknames[index]                             #When we remove client we'l also remove nicknamesw with help of index
-            broadcast('{} left!'.format(nickname).encode('ascii'))  
-            nicknames.remove(nickname)
-            break        
+            message = client.recv(1024)
+            if message.decode('ascii') == "quit":
+                # ... (previous code)
+                client.send('You have disconnected.'.encode('ascii'))
+                client.close()
+                print('{} has disconnected.'.format(nickname))  # Print disconnected message
+                break
+            else:
+                broadcast(message)
+    except:
+        # Removing And Closing Clients
+        index = clients.index(client)
+        clients.remove(client)
+        nickname = nicknames[index]
+        broadcast('{} Disconnect!'.format(nickname).encode('ascii'))
+        nicknames.remove(nickname)
+        client.close()
+        print('{} has disconnected .'.format(nickname) +' '+ctime())  # Print error disconnect message
 
-#These Functions will run later on in a thread so evrything will be running
-#Main method receive to combine all methods
+# ...
+    
 
 
-# Receiving / Listening Function
 def receive():
     while True:
         # Accept Connection
         client, address = server.accept()                          #In server IP wil login so different IP will login with same port on the server IP
-        print("Connected with {}".format(str(address)))            #Waiting for the connection and accepting the connections
+        print("Connected with {}".format(str(address)+ ' '+ctime()))   
 
         #Getting nickname by asking --- code word sent the client and the client side accepts the encoded code which is NICK here and send backs the message that he can join
         #Request And Store Nickname

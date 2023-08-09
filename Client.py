@@ -9,19 +9,23 @@
 import socket
 import threading
 
-# Choosing Nickname
+from time import ctime
+HOST = '192.168.255.1'
+PORT = '12345'
 nickname = input("Name: ")
+
 
 # Connecting To Server
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+print(f"Connecting to {HOST}:{PORT}...")
 client.connect(('192.168.255.1', 12345))                            #Instead of connecting, we'r binding to the host's port(Port Number is Confidential)
 
-# Listening to Server and Sending Nickname
+
 def receive():
     while True:
         try:
             # Receive Message From Server
-            # If 'NICK' Send Nickname
+
             message = client.recv(1024).decode('ascii')  
 
             #cheching the message which is decoded to NICK and if yes were moving up!
@@ -31,15 +35,20 @@ def receive():
                 print(message)
         except:
             # Close Connection When Error
-            print("An error occured!")
+            print(ctime() + ' '+ nickname +' ' + "Disconnect!")
+
             client.close()
             break
 
 # Sending Messages To Server
 def write():
-    while True:  
-        message = '{}: {}'.format(nickname, input(''))
+    while True:
+        message = ctime() +' User '+ '{}: {}'.format(nickname, input(''))
         client.send(message.encode('ascii'))
+        if message.endswith(": quit"):
+            client.close()
+            break
+
 
 # Starting Threads For Listening And Writing
 receive_thread = threading.Thread(target=receive)
