@@ -26,12 +26,18 @@ def select_room():
     global client
     while True:
         print('##Select room##')
-        print('Select room 1 Enter 1')
-        print('Select room 2 Enter 2')
+        print('Enter 1 Select room 1 ')
+        print('Enter 2 Select room 2 ')
+        print('Enter quit Disconnect Form Lobby ')
+        print('Enter create for Create Room')
         selectRoom = input('Select Room: ')
-        
+        if selectRoom == 'quit':
+            client.close()
+            break
+        if selectRoom.lower() == 'create':
+            create_room()
+            continue
         room_server = ROOM_SERVERS.get(selectRoom)
-        
         if room_server is None:
             print('Invalid room selection.')
         else:
@@ -41,6 +47,69 @@ def select_room():
             client.connect((server_host, server_port))
             print(f"Connected to Room {selectRoom}!")
             break
+
+def create_room():
+    room_name = input("Enter room name: ")
+    room_port = int(input("Enter room port: "))
+
+    server_code = f'''
+import socket
+import threading
+from time import ctime
+
+host = '192.168.255.1'                                                 
+port = {room_port}                                                      
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)         
+server.bind((host, port))                                          
+server.listen()                                                   
+
+clients = [] 
+nicknames = []
+
+def broadcast(message): 
+    for client in clients:
+        client.send(message)                                       
+
+def handle(client, nickname):
+    try:
+        while True:
+            message = client.recv(1024)
+            if message.decode('ascii') == "quit":
+                client.send('You have disconnected.'.encode('ascii'))
+                client.close()
+                print('{{}} has disconnected.'.format(nickname))
+                break
+            else:
+                broadcast(message)
+    except:
+        index = clients.index(client)
+        clients.remove(client)
+        nicknames.pop(index)
+        broadcast('{{}} Disconnect!'.format(nickname).encode('ascii'))
+        client.close()
+        print('{{}} has Disconnected .'.format(nickname) + ' ' + ctime())  
+
+def receive():
+    while True:
+        client, address = server.accept()                          
+        print("Connected with {{}}".format(str(address) + ' ' + ctime()))   
+
+        client.send('NICK'.encode('ascii'))                       
+        nickname = client.recv(1024).decode('ascii')                
+        nicknames.append(nickname)
+        clients.append(client)
+
+        print("Name is {{}}".format(nickname))
+        client.send('Connected to server!'.encode('ascii'))        
+
+        thread = threading.Thread(target=handle, args=(client, nickname))   
+        thread.start()                                             
+
+receive()
+    '''
+
+    with open(f'Server_{room_name}.py', 'w') as f:
+        f.write(server_code)
 
 select_room()
 
@@ -62,7 +131,7 @@ def write():
     while True:
         message = ctime() + ' User ' + '{}: {}'.format(nickname, input(''))
         client.send(message.encode('ascii'))
-        if message.endswith(": quit"):
+        if message.endswith(": leave"):
             client.close()
             select_room()
             receive_thread = threading.Thread(target=receive)
