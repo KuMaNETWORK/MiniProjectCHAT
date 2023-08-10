@@ -2,7 +2,7 @@ import socket
 import threading
 from time import ctime
 
-host = '192.168.255.1'                                                 
+host = '192.168.38.238'                                                 
 port = 3000                                                      
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)         
 server.bind((host, port))                                          
@@ -15,20 +15,6 @@ def broadcast(message):
     for client in clients:
         client.send(message)                                       
 
-def connect_to_server_3():
-    server3_host = '192.168.255.1'
-    server3_port = 3000
-
-    client3 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    print(f"Connecting to Server 3 at {server3_host}:{server3_port}...")
-    client3.connect((server3_host, server3_port))
-
-    # ทำอะไรก็ตามที่ต้องการกับ server 3
-
-    client3.close()
-    print("Disconnected from Server 3.")
-
-
 def handle(client):
     try:
         while True:
@@ -37,11 +23,6 @@ def handle(client):
                 client.send('You have disconnected.'.encode('ascii'))
                 client.close()
                 print('{} has disconnected.'.format(nickname))
-                break
-            elif message.decode('ascii') == "leave":
-                client.send('Leaving to server 3...'.encode('ascii'))
-                client.close()
-                connect_to_server_3()  # เรียกฟังก์ชันที่เชื่อมต่อ server 3
                 break
             else:
                 broadcast(message)
@@ -71,5 +52,5 @@ def receive():
         thread = threading.Thread(target=handle, args=(client,))   
         thread.start()                                             
 
-print("Lobby is started..............,:) ")
+print("Server 3 is started..............,:) ")
 receive()

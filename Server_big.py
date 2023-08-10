@@ -3,8 +3,8 @@ import socket
 import threading
 from time import ctime
 
-host = '192.168.255.1'                                                 
-port = 8000                                                      
+host = '192.168.38.238'                                                 
+port = 10000                                                      
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)         
 server.bind((host, port))                                          
 server.listen()                                                   

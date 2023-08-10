@@ -3,7 +3,7 @@ import threading
 from time import ctime
 
 host = '192.168.38.238'                                                 
-port = 1000                                                      
+port = 4000                                                      
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)         
 server.bind((host, port))                                          
 server.listen()                                                   
@@ -52,5 +52,5 @@ def receive():
         thread = threading.Thread(target=handle, args=(client,))   
         thread.start()                                             
 
-print("Server 1 is started..............,:) ")
+print("Server 4 is started..............,:) ")
 receive()

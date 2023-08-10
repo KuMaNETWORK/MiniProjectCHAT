@@ -7,7 +7,7 @@ COLOR_RESET = '\033[0m'
 COLOR_BLUE = '\033[91m'  # Blue color
 COLOR_GREEN = '\033[92m'  # Green color
 
-HOST = '192.168.255.1'
+HOST = '192.168.38.238'
 PORT = 12345
 
 print('################## Welcome to the BigWorld ##################')
@@ -17,9 +17,15 @@ nickname = input("User Name: ")
 
 # Define the server information for each room
 ROOM_SERVERS = {
-    '1': ('192.168.255.1', 1000),
-    '2': ('192.168.255.1', 2000),
-    '3': ('192.168.255.1', 3000)
+    '1': ('192.168.38.238', 1000),
+    '2': ('192.168.38.238', 2000),
+    '3': ('192.168.38.238', 3000),
+    '4': ('192.168.38.238', 4000),
+    '5': ('192.168.38.238', 5000),
+    '6': ('192.168.38.238', 6000),
+    'big': ('192.168.38.238', 10000),
+    'bee': ('192.168.38.238', 20000),
+
 }
 
 def select_room():
@@ -28,6 +34,10 @@ def select_room():
         print('##Select room##')
         print('Enter 1 Select room 1 ')
         print('Enter 2 Select room 2 ')
+        print('Enter 1 Select room 3 ')
+        print('Enter 2 Select room 4 ')
+        print('Enter 1 Select room 5 ')
+        print('Enter 2 Select room 6 ')
         print('Enter quit Disconnect Form Lobby ')
         print('Enter create for Create Room')
         selectRoom = input('Select Room: ')
@@ -57,7 +67,7 @@ import socket
 import threading
 from time import ctime
 
-host = '192.168.255.1'                                                 
+host = '192.168.38.238'                                                 
 port = {room_port}                                                      
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)         
 server.bind((host, port))                                          

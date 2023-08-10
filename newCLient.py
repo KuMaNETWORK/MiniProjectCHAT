@@ -7,7 +7,7 @@ COLOR_RESET = '\033[0m'
 COLOR_BLUE = '\033[91m'  # Blue color
 COLOR_GREEN = '\033[92m'  # Green color
 
-HOST = '192.168.255.1'
+HOST = '192.168.38.238'
 PORT = 8000
 nickname = input("User Name: ")
 
